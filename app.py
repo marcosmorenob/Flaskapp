@@ -180,15 +180,6 @@ def logout():
   logout_user()
   return redirect(url_for('products_list'))
 
-@app.route('/products/<product_id>/delete/', methods=['DELETE'])
-@login_required
-def product_delete(product_id):
-  # 
-
-@app.route('/products/create/', methods=['GET', 'POST'])
-@login_required
-def product_create():
-  #
 
 @app.route(
   '/products/<product_id>/edit/',
