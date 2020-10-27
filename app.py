@@ -2,25 +2,24 @@ from flask import Flask, make_response
 from flask_pymongo import PyMongo
 from flask import abort, jsonify, redirect, render_template
 from flask import request, url_for
-from forms import ProductForm
 from bson.objectid import ObjectId
 from flask_login import LoginManager, current_user
 from flask_login import login_user, logout_user
 from flask_login import login_required
-from forms import LoginForm
-from models import User
+from fooApp.forms import LoginForm, ProductForm
+from fooApp.models import User
+import bson
 
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'enydM2ANhdcoKwdVa0jWvEsbPFuQpMjf' # Create your own.
 app.config['SESSION_PROTECTION'] = 'strong'
 
-app.config['MONGO_DBNAME'] = 'foodb'
-app.config['MONGO_URI'] = 'mongodb://localhost:27017/foodb'
+# app.config['MONGO_DBNAME'] = 'foodb'
+# app.config['MONGO_URI'] = 'mongodb://localhost:27017/foodb'
 
-# app.config['MONGO_DBNAME'] = <namedatabase>
-# app.config['MONGO_URI'] = 
-#             "mongodb://<user>:<password>@<URLdatabase>.mlab.com:57066/<namedatabase>"
+app.config['MONGO_DBNAME'] = 'foodb'
+app.config['MONGO_URI'] = "mongodb+srv://userADS:userADS@cluster0.dhmfa.mongodb.net/foodb?retryWrites=true&w=majority"
 
 # Use Flask-Login to track current user in Flask's session.
 login_manager = LoginManager()
@@ -32,38 +31,10 @@ def load_user(user_id):
   """Flask-Login hook to load a User instance from ID."""
   u = mongo.db.users.find_one({"username": user_id})
   if not u:
-        return None
-    return User(u['username'])
+    return None
+  return User(u['username'])
 
 mongo = PyMongo(app)
-@app.route('/')
-def hello():
-    return 'Hello, world!'
-
-if __name__ == '__main__':
-    app.run()
-    
- @app.route('/products/')
-def products_list():
-  return 'Listing of all products we have.'
-
-@app.route('/products/<product_id>/')
-def product_detail(product_id):
-  return 'Detail of product     #{}.'.format(product_id)
-
-@app.route(
-  '/products/<product_id>/edit/',
-  methods=['GET', 'POST'])
-def product_edit(product_id):
-  return 'Form to edit product #.'.format(product_id)
-
-@app.route( '/products/create/', methods=['GET', 'POST'])
-def product():
-  return 'Form to create a new product.'
-
-@app.route('/products/<product_id>/delete/', methods=['DELETE'])
-def product_delete(product_id):
-    raise NotImplementedError('DELETE')
     
 @app.route('/string/')
 def return_string():
@@ -121,7 +92,7 @@ def product_detail(product_id):
   """Provide HTML page with a given product."""
   # Query: get Product object by ID.
   product = mongo.db.products.find_one({ "_id": ObjectId(product_id) })
-  print product
+  print(product)
   if product is None:
     # Abort with Not Found.
     abort(404)
@@ -137,6 +108,7 @@ def products_list():
     products=products)
 
 @app.route('/products/<product_id>/delete/', methods=['DELETE'])
+@login_required
 def product_delete(product_id):
   """Delete record using HTTP DELETE, respond with JSON."""
   result = mongo.db.products.delete_one({ "_id": ObjectId(product_id) })
