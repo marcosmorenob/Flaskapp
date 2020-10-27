@@ -15,6 +15,9 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'enydM2ANhdcoKwdVa0jWvEsbPFuQpMjf' # Create your own.
 app.config['SESSION_PROTECTION'] = 'strong'
 
+app.config['MONGO_DBNAME'] = 'foodb'
+app.config['MONGO_URI'] = 'mongodb://localhost:27017/foodb'
+
 # app.config['MONGO_DBNAME'] = <namedatabase>
 # app.config['MONGO_URI'] = 
 #             "mongodb://<user>:<password>@<URLdatabase>.mlab.com:57066/<namedatabase>"
@@ -31,10 +34,6 @@ def load_user(user_id):
   if not u:
         return None
     return User(u['username'])
-
-
-app.config['MONGO_DBNAME'] = 'foodb'
-app.config['MONGO_URI'] = 'mongodb://localhost:27017/foodb'
 
 mongo = PyMongo(app)
 @app.route('/')
