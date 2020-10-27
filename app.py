@@ -15,6 +15,9 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'enydM2ANhdcoKwdVa0jWvEsbPFuQpMjf' # Create your own.
 app.config['SESSION_PROTECTION'] = 'strong'
 
+app.config['MONGO_DBNAME'] = <namedatabase>
+app.config['MONGO_URI'] = 
+            "mongodb://<user>:<password>@<URLdatabase>.mlab.com:57066/<namedatabase>"
 
 # Use Flask-Login to track current user in Flask's session.
 login_manager = LoginManager()
