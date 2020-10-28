@@ -19,7 +19,7 @@ app.config['SESSION_PROTECTION'] = 'strong'
 # app.config['MONGO_URI'] = 'mongodb://localhost:27017/foodb'
 
 app.config['MONGO_DBNAME'] = 'foodb'
-app.config['MONGO_URI'] = "mongodb+srv://userADS:userADS@cluster0.dhmfa.mongodb.net/foodb?retryWrites=true&w=majority"
+app.config['MONGO_URI'] = "mongodb+srv://test:1234@cluster0.dhmfa.mongodb.net/foodb?retryWrites=true&w=majority"
 
 # Use Flask-Login to track current user in Flask's session.
 login_manager = LoginManager()
